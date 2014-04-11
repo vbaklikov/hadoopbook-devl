@@ -19,7 +19,8 @@ public class MaxTemperatureMapper extends Mapper<LongWritable,Text,Text,IntWrita
 		}
 		
 	}
-	
+	//comment
+	//
 	private boolean missing(String temp) { 
 		return temp.equals("+9999"); 
 	}
