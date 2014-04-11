@@ -14,11 +14,6 @@ public class MaxTemperatureMapperTest {
 	
 	MapDriver<LongWritable, Text, Text, IntWritable> mapDriver;
 	
-	@Before
-	public void setUp(){
-		 MaxTemperatureMapper mapper = new MaxTemperatureMapper();
-		 mapDriver = MapDriver.newMapDriver(mapper);
-	}
 	
 	@Test
 	public void parsesValidRecord() throws IOException, InterruptedException {
@@ -29,11 +24,23 @@ public class MaxTemperatureMapperTest {
 	                                  // Year ^^^^
 	        "99999V0203201N00261220001CN9999999N9-00111+99999999999");
 	                              // Temperature ^^^^^
-	    
+		mapDriver = MapDriver.newMapDriver(new MaxTemperatureMapper());
 	    mapDriver.withInput(new LongWritable(),value);
 	    mapDriver.withOutput(new Text("1950"), new IntWritable(-11));
 	    mapDriver.runTest();
 	    
 	 }
+	
+	@Test
+	public void testIgnoreMissingTemperatureRecord(){
+		Text value = new Text("0043011990999991950051518004+68750+023550FM-12+0382" +
+                			 // Year ^^^^
+"99999V0203201N00261220001CN9999999N9+99991+99999999999");
+            		  // Temperature ^^^^^
+		mapDriver = MapDriver.newMapDriver(new MaxTemperatureMapper());
+		mapDriver.withInput(new LongWritable(),value);
+		mapDriver.runTest();
+		
+	}
 
 }
